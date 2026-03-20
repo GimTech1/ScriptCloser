@@ -204,6 +204,88 @@
 
         .hint { font-size: 0.75rem; color: var(--gray); margin-top: 24px; }
 
+        .wa-cobranca-visual {
+            margin-top: 28px;
+            padding-top: 28px;
+            border-top: 1px solid rgba(190, 183, 164, 0.22);
+        }
+
+        .wa-cobranca-visual > h3 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--beige);
+            margin-bottom: 6px;
+        }
+
+        .wa-cobranca-visual > .wa-sub {
+            font-size: 0.88rem;
+            color: var(--gray-light);
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+
+        .wa-cobranca-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 960px) {
+            .wa-cobranca-grid { grid-template-columns: 1fr; }
+        }
+
+        .wa-cobranca-item {
+            border: 1px solid rgba(190, 183, 164, 0.22);
+            border-radius: 12px;
+            padding: 16px 14px;
+            background: rgba(27, 21, 64, 0.45);
+            text-align: left;
+        }
+
+        .wa-cobranca-item .wa-etq {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--beige);
+            margin-bottom: 6px;
+        }
+
+        .wa-cobranca-item .wa-preco {
+            font-size: 1.65rem;
+            font-weight: 800;
+            color: var(--white);
+            line-height: 1.15;
+            margin-bottom: 8px;
+        }
+
+        .wa-cobranca-item .wa-preco small {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--gray-light);
+        }
+
+        .wa-cobranca-item .wa-txt {
+            font-size: 0.82rem;
+            color: var(--gray-light);
+            line-height: 1.5;
+        }
+
+        .wa-cobranca-item.wa-zero .wa-preco { color: #86efac; }
+
+        .wa-cobranca-nota {
+            font-size: 0.78rem;
+            color: var(--gray);
+            line-height: 1.5;
+            padding: 12px 14px;
+            border-radius: 8px;
+            background: rgba(190, 183, 164, 0.06);
+            border: 1px solid rgba(190, 183, 164, 0.12);
+        }
+
         /* Fala completa: só o que o vendedor deve falar, do início ao fim */
         .slide-fala-completa {
             padding: 48px 56px 64px;
@@ -325,7 +407,7 @@
                         <br><br>
                         <strong style="color: var(--beige);">[FALE ISSO]</strong>: "Olha o caminho que esse lead faz: ele entra pela campanha, o sistema identifica o ID da mensagem no WhatsApp e já começa uma conversa automática com foco em agendar. E o melhor é que vocês definem aqui os horários em que querem receber esses agendamentos e, conforme ele avança, eu consigo ir mudando o status para saber exatamente em que pé está cada oportunidade. E quando a gente agenda, o nosso robô já avisa o paciente sozinho, lembra ele no dia e também alguns dias antes, para reduzir falta e deixar a agenda sempre cheia."
                         <br><br>
-                        <strong style="color: var(--beige);">[FALE ISSO — COBRANÇA WHATSAPP]</strong>: "E só para deixar bem simples a parte de custo de WhatsApp: a Meta não cobra por mensagem solta, ela cobra por janelas de conversa. Quando o paciente chama vocês primeiro e vocês respondem dentro de 24 horas, isso praticamente não gera custo extra. O que passa a ter um custo, e mesmo assim bem controlado, é quando vocês disparam campanhas ativas de marketing; aí cada conversa tem um valor baixo por janela e tudo fica registrado aqui nos relatórios, sem surpresa."
+                        <strong style="color: var(--beige);">[FALE ISSO — COBRANÇA WHATSAPP]</strong>: "Para ficar bem claro o custo de WhatsApp na prática: quando o paciente manda mensagem primeiro e vocês respondem dentro de 24 horas, na nossa referência isso não gera cobrança por disparo. Agora, quando é marketing, disparo de campanha, a referência que a gente usa na conversa com a clínica é cinquenta centavos. Quando é utilitário — agenda, atendimento, lembretes, boleto, consulta — a referência é meio centavo de real, ou seja, zero vírgula zero zero cinco. Tudo isso entra no relatório para não ter surpresa."
                         <br><br>
                         <strong>2. Agenda e dia a dia</strong> — <strong style="color: var(--beige);">[FALE ISSO]</strong>: "Agora que você viu de onde os leads vêm, aqui na agenda é onde eles chegam organizados, na visão de dia ou semana de vocês; nada de planilha ou papel perdido. O papel da clínica aqui é muito simples: pedir as campanhas e acompanhar a agenda, o resto o sistema faz para vocês."
                         <br><br>
@@ -339,20 +421,12 @@
                         <br><br>
                         <strong>6. Dashboard (fechamento)</strong> — <strong style="color: var(--beige);">[FALE ISSO]</strong>: "Para fechar, deixa eu te mostrar o dashboard. Tudo o que eu te mostrei até agora — Marketing trazendo lead, agenda, paciente, prontuário e boletos — aqui vira número: é metrificado, calculado e te mostrado em dados. Depois que a aba de Marketing faz o papel desse ‘gestor de tráfego automático’ e traz os leads, e que os boletos são gerados e cobrados automaticamente, aqui no painel vocês acompanham o resultado: quantos leads entraram, quantos viraram agendamento, qual o impacto em receita e quais campanhas performam melhor. É o lugar em que o dono da clínica olha e entende, em poucos segundos, se o funil está rodando como deveria."
                         <br><br>
-                        Ritmo: 2–4 min por bloco. Se sentir que está pesado, encerre e siga para os caminhos (Base/Controle/Performance).
+                        Ritmo: 2–4 min por bloco. Se sentir que está pesado, encerre e siga para os caminhos (Controle/Performance).
                     </div>
                 </div>
 
                 <div class="fala-bloco">
-                    <div class="etiqueta">Caminho 1 — Base</div>
-                    <div class="texto">
-                        <span class="destaque">"Tem clínicas que hoje não precisam crescer. Precisam parar de perder informação e organizar o dia a dia."</span>
-                        <span class="destaque">"O Leev Clinic resolve isso: agenda, paciente, atendimento e histórico em um único lugar."</span>
-                    </div>
-                </div>
-
-                <div class="fala-bloco">
-                    <div class="etiqueta">Caminho 2 — Controle</div>
+                    <div class="etiqueta">Caminho 1 — Controle</div>
                     <div class="texto">
                         <span class="destaque">"Tem clínicas que já estão organizadas, mas travam quando tentam crescer."</span>
                         <span class="destaque">"O Leev Controle é para crescer com método: organização + gestão + entrada ativa de novos pacientes, sem perder controle."</span>
@@ -360,7 +434,7 @@
                 </div>
 
                 <div class="fala-bloco">
-                    <div class="etiqueta">Caminho 3 — Performance (só se o cenário justificar)</div>
+                    <div class="etiqueta">Caminho 2 — Performance (só se o cenário justificar)</div>
                     <div class="texto">
                         <span class="destaque">"Agora, quando o problema não é gestão, e sim demanda, plano padrão não resolve."</span>
                         <span class="destaque">"Nesse caso, a gente não vende plano. A gente desenha o crescimento junto com a clínica."</span>
@@ -512,7 +586,7 @@
                 <p class="quote" style="margin-top: 8px;">"Quais os pontos positivos?"</p>
                 <p class="quote" style="margin-top: 8px;">"Quais os pontos negativos desse sistema?"</p>
             </div>
-            <p class="hint">Use as respostas depois: na hora de apresentar Base, Controle ou Performance, encaixe o Leev nos pontos negativos que ele citou e reforce os positivos que ele quer manter.</p>
+            <p class="hint">Use as respostas depois: na hora de apresentar Controle ou Performance, encaixe o Leev nos pontos negativos que ele citou e reforce os positivos que ele quer manter.</p>
         </div>
         <aside class="gatilhos-sidebar">
             <div class="gatilho-box use">
@@ -567,20 +641,47 @@
                 <ol style="list-style: decimal; padding-left: 24px; color: var(--gray-light); margin-top: 12px;">
                     <li style="margin-bottom: 12px;"><strong style="color: var(--white);">Marketing / Captação (ouro dos leads)</strong> — <strong style="color: var(--beige);">[FALE ISSO]</strong>: "Vamos começar pelo ouro da operação, que é a aba de Marketing, onde fica toda a captação e o agendamento de leads. Na prática, é como se vocês tivessem um gestor de tráfego automático dentro da clínica: vocês pedem a campanha e o próprio sistema já começa a encher a agenda de oportunidades, sem depender de ninguém lembrando de responder."</li>
                     <li style="margin-bottom: 12px;"><strong style="color: var(--beige);">[FALE ISSO]</strong>: "Olha o caminho que esse lead faz: ele entra pela campanha, o sistema identifica o ID da mensagem no WhatsApp e já começa uma conversa automática com foco em agendar. E o melhor é que vocês definem aqui os horários em que querem receber esses agendamentos e, conforme ele avança, eu consigo ir mudando o status para saber exatamente em que pé está cada oportunidade."</li>
-                    <li style="margin-bottom: 12px;"><strong style="color: var(--beige);">[FALE ISSO — COBRANÇA WHATSAPP]</strong>: "E só para deixar bem simples a parte de custo de WhatsApp: a Meta não cobra por mensagem solta, ela cobra por janelas de conversa. Quando o paciente chama vocês primeiro e vocês respondem dentro de 24 horas, isso praticamente não gera custo extra. O que passa a ter um custo, e mesmo assim bem controlado, é quando vocês disparam campanhas ativas de marketing; aí cada conversa tem um valor baixo por janela e tudo fica registrado aqui nos relatórios, sem surpresa."</li>
+                    <li style="margin-bottom: 12px;"><strong style="color: var(--beige);">[FALE ISSO — COBRANÇA WHATSAPP]</strong>: "Para ficar bem claro o custo de WhatsApp na prática: quando o paciente manda mensagem primeiro e vocês respondem dentro de 24 horas, na nossa referência isso não gera cobrança por disparo. Quando é marketing, disparo de campanha, a referência que a gente usa na conversa com a clínica é cinquenta centavos. Quando é utilitário — agenda, atendimento, lembretes, boleto, consulta — a referência é meio centavo de real, zero vírgula zero zero cinco. Tudo isso entra no relatório para não ter surpresa."</li>
                     <li style="margin-bottom: 12px;"><strong style="color: var(--white);">Agenda e dia a dia</strong> — <strong style="color: var(--beige);">[FALE ISSO]</strong>: "Agora que você viu de onde os leads vêm, aqui na agenda é onde eles chegam organizados, na visão de dia ou semana de vocês; nada de planilha ou papel perdido."</li>
                     <li style="margin-bottom: 12px;"><strong style="color: var(--white);">Paciente e linha do tempo</strong> — <strong style="color: var(--beige);">[FALE ISSO]</strong>: "A partir do momento em que ele vira paciente, ele deixa de ser um evento solto. Aqui fica a linha do tempo dele: tudo o que vocês fizeram com esse paciente, em ordem, fácil de achar."</li>
                     <li style="margin-bottom: 12px;"><strong style="color: var(--white);">Atendimento e prontuário</strong> — <strong style="color: var(--beige);">[FALE ISSO]</strong>: "Cada atendimento fica registrado e ligado ao paciente. Aqui no prontuário vocês conseguem gerar atestados e receituários em poucos cliques, todos já com o logo da clínica em marca d’água e com a assinatura digital do doutor, e o próprio sistema já envia esses documentos direto no WhatsApp do paciente."</li>
                     <li style="margin-bottom: 12px;"><strong style="color: var(--white);">Funcionalidades que surpreendem</strong> — <strong style="color: var(--beige);">[FALE ALGO COMO]</strong>: "Além disso, tudo o que é base para o dia a dia do doutor já está aqui: odontograma completo, anexos de exames e documentos do paciente, histórico, atestados, receituários, tudo centralizado. E, dependendo do que faz mais sentido para vocês, a gente ainda consegue puxar relatórios, controlar boletos, rodar campanhas e automações em cima da base. A ideia é que o doutor não sinta falta de nada e que o fluxo inteiro fique redondo dentro do sistema." Depois pergunte: "Isso faz sentido pro fluxo de vocês?"</li>
                     <li style="margin-bottom: 12px;"><strong style="color: var(--white);">Dashboard (fechamento)</strong> — <strong style="color: var(--beige);">[FALE ISSO]</strong>: "Para fechar, deixa eu te mostrar o dashboard. Tudo o que eu te mostrei até agora — Marketing trazendo lead, agenda, paciente, prontuário — aqui vira número: é metrificado, calculado e te mostrado em dados. Depois que a aba de Marketing faz o papel desse ‘gestor de tráfego automático’ e traz os leads, aqui no painel vocês acompanham o resultado: quantos leads entraram, quantos viraram agendamento, quais campanhas performam melhor. É o lugar em que o dono da clínica olha e entende, em poucos segundos, se o funil está rodando como deveria."</li>
                 </ol>
-                <p style="margin-top: 20px; color: var(--beige);">Ritmo: não fique mais de 5 min na mesma tela. Se sentir que está pesado, encerre o bloco e siga para os caminhos (Base/Controle/Performance).</p>
+                <p style="margin-top: 20px; color: var(--beige);">Ritmo: não fique mais de 5 min na mesma tela. Se sentir que está pesado, encerre o bloco e siga para os caminhos (Controle/Performance).</p>
+
+                <div class="wa-cobranca-visual">
+                    <h3>Mapa rápido — cobrança WhatsApp (mostrar ou ler)</h3>
+                    <p class="wa-sub">Três caixas na ordem: o que não cobra na referência, o que é campanha, o que é operação do dia a dia.</p>
+                    <div class="wa-cobranca-grid">
+                        <div class="wa-cobranca-item wa-zero">
+                            <div class="wa-etq">1. Paciente fala primeiro</div>
+                            <div class="wa-preco">R$ 0 <small>na referência</small></div>
+                            <p class="wa-txt">Vocês recebem a mensagem do paciente e respondem dentro de <strong>24 horas</strong>. Na referência comercial Leev: <strong>sem cobrança</strong> por esse tipo de janela.</p>
+                        </div>
+                        <div class="wa-cobranca-item">
+                            <div class="wa-etq">2. Marketing / campanha</div>
+                            <div class="wa-preco">R$ 0,50</div>
+                            <p class="wa-txt">Disparo ativo, campanha, captação em massa. Referência para falar com o cliente: <strong>cinquenta centavos</strong> (por disparo na lógica que vocês usam no fechamento).</p>
+                        </div>
+                        <div class="wa-cobranca-item">
+                            <div class="wa-etq">3. Utilitário</div>
+                            <div class="wa-preco">R$ 0,005</div>
+                            <p class="wa-txt">Agenda, atendimento, lembretes, boleto, consulta e mensagens operacionais. Referência: <strong>meio centavo de real</strong> (0,5 centavo de real).</p>
+                        </div>
+                    </div>
+                    <p class="wa-cobranca-nota"><strong>Closer:</strong> use este mapa na tela compartilhada ou aponte com o dedo na conversa. Valores são referência para explicação comercial; se financeiro atualizar tabela, ajuste só os números aqui. A Meta trabalha com categorias e janelas; na fala você resume em &quot;recebeu em 24h / marketing / utilitário&quot;.</p>
+                </div>
             </div>
         </div>
         <aside class="gatilhos-sidebar">
             <div class="gatilho-box use">
                 <h4>Seu norte aqui</h4>
                 <p>A apresentação do sistema está no script. Siga a ordem; use as frases; mantenha o ritmo.</p>
+            </div>
+            <div class="gatilho-box">
+                <h4>Custo WhatsApp</h4>
+                <p>Se perguntarem de preço, role até o mapa de três caixas no fim deste slide ou leia o bloco [FALE ISSO — COBRANÇA WHATSAPP] na lista.</p>
             </div>
             <div class="gatilho-box nunca">
                 <h4>Evite</h4>
@@ -593,39 +694,10 @@
         </aside>
     </section>
 
-    <!-- 8. Caminho Base -->
+    <!-- 8. Caminho Controle -->
     <section class="slide" id="slide-8">
         <div class="slide-main">
             <span class="slide-label">Caminho 1</span>
-            <h2 class="slide-title">Leev Base</h2>
-            <div class="script-block">
-                <p class="quote">"Tem clínicas que hoje não precisam crescer. Precisam parar de perder informação e organizar o dia a dia."</p>
-                <p class="quote">"O Leev Base resolve isso: agenda, paciente, atendimento e histórico em um único lugar."</p>
-            </div>
-        </div>
-        <aside class="gatilhos-sidebar">
-            <div class="gatilho-box nunca">
-                <h4>Não faça no Base</h4>
-                <ul>
-                    <li>Não prometa crescimento</li>
-                    <li>Não fale volume</li>
-                    <li>Não fale motor</li>
-                </ul>
-            </div>
-            <div class="gatilho-box use">
-                <h4>Use quando</h4>
-                <ul>
-                    <li>Organização é fraca</li>
-                    <li>Crescimento agora seria risco</li>
-                </ul>
-            </div>
-        </aside>
-    </section>
-
-    <!-- 9. Caminho Controle -->
-    <section class="slide" id="slide-9">
-        <div class="slide-main">
-            <span class="slide-label">Caminho 2</span>
             <h2 class="slide-title">Leev Controle</h2>
             <div class="script-block">
                 <p class="quote">"Tem clínicas que já estão organizadas, mas travam quando tentam crescer."</p>
@@ -643,10 +715,10 @@
         </aside>
     </section>
 
-    <!-- 10. Caminho Performance -->
-    <section class="slide" id="slide-10">
+    <!-- 9. Caminho Performance -->
+    <section class="slide" id="slide-9">
         <div class="slide-main">
-            <span class="slide-label">Caminho 3 (só se o cenário justificar)</span>
+            <span class="slide-label">Caminho 2</span>
             <h2 class="slide-title">Leev Performance</h2>
             <div class="script-block">
                 <p class="quote">"Agora, quando o problema não é gestão, e sim demanda, plano padrão não resolve."</p>
@@ -665,6 +737,24 @@
             <div class="gatilho-box">
                 <h4>Posicionamento</h4>
                 <p>Performance é posicionamento premium. Não empurre.</p>
+            </div>
+        </aside>
+    </section>
+
+    <!-- 10. Regra de decisão -->
+    <section class="slide" id="slide-10">
+        <div class="slide-main">
+            <span class="slide-label">Regra de decisão</span>
+            <h2 class="slide-title">Quando indicar cada plano</h2>
+            <div class="script-block">
+                <p class="quote">"Se o gargalo é organizar e crescer com processo, o caminho é Controle."</p>
+                <p class="quote">"Se a clínica já está redonda e o desafio é escala de demanda, o caminho é Performance."</p>
+            </div>
+        </div>
+        <aside class="gatilhos-sidebar">
+            <div class="gatilho-box use">
+                <h4>Filtro rápido</h4>
+                <p>Pergunta de corte: "Hoje o gargalo é método de operação ou volume de demanda?"</p>
             </div>
         </aside>
     </section>
@@ -710,7 +800,7 @@
             <h2 class="slide-title">Script</h2>
             <div class="script-block">
                 <p class="quote">"O próximo passo não é fechar nada agora. É configurar o Leev no fluxo real da sua clínica e validar isso na prática."</p>
-                <p style="margin-top: 20px;">Base/Controle: onboarding guiado. Performance: diagnóstico aprofundado.</p>
+                <p style="margin-top: 20px;">Controle: onboarding guiado. Performance: diagnóstico aprofundado.</p>
                 <p style="margin-top: 16px;">Sempre feche com: <strong>data</strong>, <strong>ação</strong>, <strong>responsável</strong>. Sem ambiguidade.</p>
             </div>
         </div>
@@ -763,7 +853,7 @@
                     <li><strong>Objeção: "Minha recepção não dá conta de mais um sistema."</strong><br>
                         <strong>[FALE ISSO]</strong>: "É exatamente por isso que o Leev existe. Em vez de recepção ficar entre planilha, WhatsApp e sistema de agenda, ela passa a olhar tudo em um lugar só. A curva de aprendizado é pequena, e durante a demo de 7 dias a gente foca em deixar o fluxo o mais simples possível para o seu time."</li>
                     <li><strong>Objeção: "Tenho medo de custo de WhatsApp e boleto."</strong><br>
-                        <strong>[FALE ISSO]</strong>: "A Meta não cobra por mensagem solta, ela cobra por janelas de conversa. Quando o paciente chama vocês primeiro e vocês respondem dentro de 24 horas, isso praticamente não gera custo extra. E, mesmo nas campanhas ativas, o valor por conversa é baixo e previsível. No caso dos boletos, a automação reduz tanto retrabalho de cobrança e inadimplência que o ganho costuma ser maior do que o custo da transação."</li>
+                        <strong>[FALE ISSO]</strong>: "No WhatsApp a gente resume em três regras: se o paciente manda primeiro e vocês respondem em até 24 horas, na nossa referência não cobra. Campanha de marketing, referência de cinquenta centavos. Tudo que é utilitário — agenda, lembrete, boleto, consulta, atendimento — referência de meio centavo de real. E fica registrado no relatório. No boleto, a automação costuma pagar o custo com menos falta e menos cobrança manual."</li>
                     <li><strong>Objeção: "Não sei se a equipe vai usar."</strong><br>
                         <strong>[FALE ISSO]</strong>: "Por isso a gente trabalha com a demo guiada. Por 7 dias, seu time de agenda, financeiro e gestão usa o sistema na prática. No oitavo dia, em vez de eu te ‘convencer’, é você quem traz o feedback do time sobre o que funcionou e o que não encaixou. A decisão fica baseada em uso real, não em promessa minha."</li>
                     <li><strong>Objeção: "Sou parceiro e quero liberar tudo agora."</strong><br>
