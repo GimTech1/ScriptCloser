@@ -1,919 +1,748 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Script Closer — Norte do vendedor | Leev</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>feez! — Script Closer · Uso Interno</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --indigo: #1E2612;
+    --indigo-soft: #2a3419;
+    --terracota: #C4704A;
+    --terracota-light: #e89570;
+    --beige: #F5F1E8;
+    --white: #FFFFFF;
+    --black: #0A0A0A;
+    --slate: #6B6B6B;
+    --line: rgba(0,0,0,0.1);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 300;
+    color: var(--black);
+    background: var(--white);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 9999;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  @keyframes blobFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(40px, -30px) scale(1.1); }
+    66% { transform: translate(-30px, 40px) scale(0.95); }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
 
-        :root {
-            --black: #000000;
-            --white: #FFFFFC;
-            --beige: #BEB7A4;
-            --purple-dark: #1B1540;
-            --gray: #8a8a8a;
-            --gray-light: #c5c5c5;
-        }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
 
-        html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--black);
-            color: var(--white);
-            overflow-x: hidden;
-        }
+  .topbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding: 1.5rem 0;
+  }
+  .topbar .container { max-width: 100%; padding: 0 2.5rem; }
+  .topbar-inner { display: flex; justify-content: space-between; align-items: center; gap: 2rem; }
+  .logo img { height: 72px; width: auto; display: block; }
+  footer .logo img { height: 72px; filter: brightness(0) invert(1); }
+  .topbar-tag { font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--slate); }
+  @media (max-width: 768px) {
+    .topbar .container { padding: 0 1.25rem; }
+    .logo img { height: 52px; }
+  }
 
-        .slide {
-            min-height: 100vh;
-            display: flex;
-            align-items: stretch;
-            padding: 40px 24px 40px 40px;
-            scroll-snap-align: start;
-            gap: 32px;
-        }
+  .hero {
+    min-height: 80vh;
+    display: flex; align-items: center;
+    background: linear-gradient(180deg, var(--beige) 0%, #fafaf7 100%);
+    position: relative; overflow: hidden;
+    padding: 6rem 0 4rem;
+  }
+  .hero::before, .hero::after {
+    content: ''; position: absolute;
+    border-radius: 50%; filter: blur(80px); pointer-events: none;
+  }
+  .hero::before {
+    top: 5%; right: -8%;
+    width: 560px; height: 560px;
+    background: radial-gradient(circle, rgba(196,112,74,0.35) 0%, transparent 65%);
+    animation: blobFloat 18s ease-in-out infinite;
+  }
+  .hero::after {
+    bottom: -15%; left: -10%;
+    width: 480px; height: 480px;
+    background: radial-gradient(circle, rgba(30,38,18,0.18) 0%, transparent 65%);
+    animation: blobFloat 22s ease-in-out infinite reverse;
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 820px; }
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--terracota);
+    margin-bottom: 2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--terracota);
+  }
+  .hero h1 {
+    font-size: clamp(2.75rem, 6.5vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.045em;
+    color: var(--indigo);
+    margin-bottom: 2rem;
+  }
+  .hero h1 em {
+    font-style: normal; font-weight: 800;
+    background: linear-gradient(110deg, var(--terracota) 0%, var(--terracota-light) 50%, var(--terracota) 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 4s linear infinite;
+  }
+  .hero-sub { font-size: 1.25rem; color: var(--slate); max-width: 700px; margin-bottom: 3rem; }
+  .hero-promises {
+    display: flex; gap: 3rem; flex-wrap: wrap;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(0,0,0,0.08);
+  }
+  .hero-promises div strong {
+    display: block;
+    font-size: 2.25rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--indigo);
+  }
+  .hero-promises div span { font-size: 0.8rem; color: var(--slate); text-transform: uppercase; letter-spacing: 0.1em; }
 
-        .slide-main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            max-width: 720px;
-        }
+  section { padding: 7rem 0; }
+  .section-eyebrow {
+    font-size: 0.7rem; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--terracota);
+    margin-bottom: 1.5rem; display: block;
+  }
+  .section-title {
+    font-size: clamp(2rem, 4.5vw, 3.5rem);
+    font-weight: 800; line-height: 1.05;
+    letter-spacing: -0.04em; color: var(--indigo);
+    margin-bottom: 1.5rem; max-width: 900px;
+  }
+  .section-title em {
+    font-style: normal; color: var(--terracota);
+    position: relative; display: inline-block;
+  }
+  .section-title em::after {
+    content: ''; position: absolute;
+    left: 0; right: 0; bottom: 0.05em;
+    height: 0.25em; background: var(--terracota);
+    opacity: 0.15; z-index: -1;
+  }
+  .section-lead { font-size: 1.15rem; color: var(--slate); max-width: 720px; margin-bottom: 4rem; }
 
-        .slide-label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: var(--beige);
-            margin-bottom: 16px;
-            opacity: 0.9;
-        }
+  /* Princípios */
+  .philosophy { background: var(--white); }
+  .philosophy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2.5rem 3rem;
+    margin-top: 4rem;
+  }
+  .philosophy-item {
+    border-top: 1px solid var(--line);
+    padding-top: 1.75rem;
+  }
+  .philosophy-item .icon { width: 28px; height: 28px; color: var(--indigo); margin-bottom: 1.25rem; }
+  .philosophy-item h3 {
+    font-size: 1.05rem; font-weight: 600;
+    color: var(--indigo); margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
+  }
+  .philosophy-item p { font-size: 0.92rem; color: var(--slate); }
 
-        .slide-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--white);
-            margin-bottom: 24px;
-            letter-spacing: -0.5px;
-        }
+  /* Etapas (timeline) */
+  .timeline { background: var(--beige); }
+  .phases {
+    margin-top: 4rem;
+    display: flex; flex-direction: column; gap: 1px;
+    background: var(--line);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .phase {
+    background: var(--beige);
+    padding: 3rem 0;
+    display: grid;
+    grid-template-columns: 180px 1fr 2fr;
+    gap: 3rem;
+    align-items: start;
+    transition: background 0.3s;
+  }
+  .phase:hover { background: #ede7d5; }
+  .phase-week {
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--terracota);
+    font-weight: 600;
+    padding-top: 0.4rem;
+  }
+  .phase-week strong {
+    display: block;
+    font-size: 2.75rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    color: var(--indigo);
+    margin-top: 0.4rem;
+    line-height: 1;
+  }
+  .phase-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--indigo);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .phase-title-sub {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--slate);
+    margin-top: 0.5rem;
+    letter-spacing: 0;
+  }
+  .phase-content p { font-size: 0.98rem; color: var(--slate); margin-bottom: 1.25rem; }
+  .phase-content .quote {
+    display: block;
+    background: var(--white);
+    border-left: 3px solid var(--terracota);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    color: var(--indigo);
+    font-weight: 500;
+    font-style: italic;
+  }
+  .phase-content .quote::before { content: '"'; margin-right: 0.15rem; }
+  .phase-content .quote::after { content: '"'; margin-left: 0.15rem; }
+  .phase-content ul { list-style: none; margin-top: 0.75rem; }
+  .phase-content li {
+    font-size: 0.88rem; color: var(--indigo);
+    display: flex; gap: 0.6rem; padding: 0.35rem 0;
+    align-items: flex-start;
+  }
+  .phase-content li::before {
+    content: ''; flex-shrink: 0;
+    width: 6px; height: 6px; margin-top: 0.55rem;
+    border-radius: 50%; background: var(--terracota);
+  }
+  @media (max-width: 900px) {
+    .phase { grid-template-columns: 1fr; gap: 1.25rem; padding: 2.5rem 0; }
+    .phase-week strong { font-size: 2.25rem; }
+  }
 
-        .script-block {
-            background: rgba(27, 21, 64, 0.4);
-            border: 1px solid rgba(190, 183, 164, 0.2);
-            border-radius: 12px;
-            padding: 28px 32px;
-            margin-bottom: 20px;
-        }
+  /* Regras de ouro */
+  .followup { background: var(--white); }
+  .checkpoints {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 4rem;
+  }
+  .checkpoint {
+    padding: 2.5rem;
+    background: #fafaf7;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+  .checkpoint:hover { border-color: var(--terracota); transform: translateY(-4px); }
+  .checkpoint-tag {
+    font-size: 0.7rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--terracota);
+    font-weight: 600; margin-bottom: 0.75rem;
+  }
+  .checkpoint-day {
+    font-size: 3rem; font-weight: 800;
+    letter-spacing: -0.04em; color: var(--indigo);
+    line-height: 1; margin-bottom: 1.5rem;
+  }
+  .checkpoint-day span { font-size: 1.2rem; font-weight: 500; color: var(--slate); margin-left: 0.25rem; }
+  .checkpoint h3 {
+    font-size: 1.1rem; font-weight: 700;
+    color: var(--indigo); margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
+  }
+  .checkpoint p { font-size: 0.9rem; color: var(--slate); line-height: 1.6; }
+  @media (max-width: 900px) { .checkpoints { grid-template-columns: 1fr; } }
 
-        .script-block p {
-            font-size: 1.1rem;
-            line-height: 1.7;
-            color: var(--gray-light);
-        }
+  /* Objeções + Box */
+  .objections { background: var(--beige); }
+  .obj-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin-top: 4rem;
+    align-items: start;
+  }
+  .obj-list { display: flex; flex-direction: column; gap: 1.5rem; }
+  .obj-item {
+    padding: 1.75rem 2rem;
+    background: var(--white);
+    border-left: 3px solid var(--terracota);
+  }
+  .obj-item .q {
+    font-size: 0.7rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--terracota);
+    font-weight: 700; margin-bottom: 0.5rem;
+  }
+  .obj-item h4 {
+    font-size: 1.05rem; font-weight: 700;
+    color: var(--indigo); margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
+  }
+  .obj-item p { font-size: 0.92rem; color: var(--slate); line-height: 1.6; }
 
-        .script-block .quote {
-            font-size: 1.15rem;
-            color: var(--white);
-            font-weight: 500;
-            border-left: 4px solid var(--beige);
-            padding-left: 20px;
-            margin: 16px 0;
-        }
+  .promise-box {
+    padding: 3rem;
+    background: var(--indigo);
+    color: var(--white);
+    position: relative;
+    overflow: hidden;
+  }
+  .promise-box::before {
+    content: '';
+    position: absolute;
+    top: -30%; right: -30%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(196,112,74,0.3) 0%, transparent 60%);
+    filter: blur(40px);
+  }
+  .promise-box > * { position: relative; }
+  .promise-box .tag {
+    font-size: 0.7rem; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--terracota);
+    font-weight: 600; margin-bottom: 1.25rem; display: block;
+  }
+  .promise-box h3 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    margin-bottom: 1.5rem;
+  }
+  .promise-box p {
+    font-size: 0.98rem;
+    color: rgba(255,255,255,0.75);
+    margin-bottom: 2rem;
+  }
+  .promise-box ul {
+    list-style: none;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    padding-top: 1.5rem;
+  }
+  .promise-box ul li {
+    padding: 0.75rem 0;
+    font-size: 0.92rem;
+    display: flex; gap: 0.75rem;
+    color: rgba(255,255,255,0.9);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .promise-box ul li:last-child { border-bottom: none; }
+  .promise-box ul li::before { content: '→'; color: var(--terracota); font-weight: 700; }
+  @media (max-width: 900px) { .obj-grid { grid-template-columns: 1fr; gap: 2.5rem; } }
 
-        .script-block ul {
-            list-style: none;
-            margin-top: 12px;
-        }
+  /* Final */
+  .final {
+    background: var(--indigo); color: var(--white);
+    text-align: center; padding: 8rem 0;
+    position: relative; overflow: hidden;
+  }
+  .final::before {
+    content: ''; position: absolute;
+    top: 50%; left: 50%;
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(196,112,74,0.2) 0%, transparent 60%);
+    transform: translate(-50%, -50%);
+    filter: blur(60px);
+    animation: blobFloat 15s ease-in-out infinite;
+  }
+  .final > .container { position: relative; z-index: 1; }
+  .final h2 {
+    font-size: clamp(2.25rem, 5.5vw, 4rem);
+    font-weight: 800; line-height: 1.02;
+    letter-spacing: -0.04em; margin-bottom: 1.5rem;
+  }
+  .final h2 em {
+    font-style: normal;
+    background: linear-gradient(110deg, var(--terracota) 0%, var(--terracota-light) 50%, var(--terracota) 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 4s linear infinite;
+  }
+  .final p { font-size: 1.15rem; color: rgba(255,255,255,0.7); max-width: 640px; margin: 0 auto 3rem; }
+  .final-btn {
+    display: inline-block;
+    padding: 1.35rem 3.5rem;
+    background: linear-gradient(135deg, var(--terracota) 0%, var(--terracota-light) 100%);
+    color: var(--white);
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    border-radius: 100px;
+    transition: all 0.4s;
+    box-shadow: 0 12px 32px rgba(196,112,74,0.35);
+    position: relative; overflow: hidden;
+  }
+  .final-btn::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.6s;
+  }
+  .final-btn:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(196,112,74,0.5); }
+  .final-btn:hover::before { transform: translateX(100%); }
 
-        .script-block li {
-            font-size: 1rem;
-            color: var(--gray-light);
-            padding: 8px 0;
-            padding-left: 24px;
-            position: relative;
-        }
+  footer {
+    background: var(--black); color: rgba(255,255,255,0.6);
+    padding: 3rem 0; text-align: center; font-size: 0.85rem;
+  }
+  footer .logo { display: flex; justify-content: center; margin-bottom: 1rem; }
 
-        .script-block li::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            width: 6px;
-            height: 6px;
-            background: var(--beige);
-            border-radius: 50%;
-            transform: translateY(-50%);
-            opacity: 0.6;
-        }
-
-        .gatilhos-sidebar {
-            width: 300px;
-            flex-shrink: 0;
-            position: sticky;
-            top: 40px;
-            height: fit-content;
-            max-height: calc(100vh - 80px);
-            overflow-y: auto;
-        }
-
-        .gatilho-box {
-            background: rgba(190, 183, 164, 0.08);
-            border: 1px solid rgba(190, 183, 164, 0.25);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 16px;
-        }
-
-        .gatilho-box h4 {
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--beige);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .gatilho-box p, .gatilho-box ul {
-            font-size: 0.85rem;
-            color: var(--gray-light);
-            line-height: 1.55;
-        }
-
-        .gatilho-box ul {
-            list-style: none;
-            margin-top: 8px;
-        }
-
-        .gatilho-box li {
-            padding: 4px 0;
-            padding-left: 16px;
-            position: relative;
-        }
-
-        .gatilho-box li::before {
-            content: '-';
-            position: absolute;
-            left: 0;
-            color: var(--beige);
-            opacity: 0.8;
-        }
-
-        .gatilho-box.regra { border-color: rgba(234, 179, 8, 0.4); }
-        .gatilho-box.regra h4 { color: #eab308; }
-        .gatilho-box.nunca { border-color: rgba(239, 68, 68, 0.35); }
-        .gatilho-box.nunca h4 { color: #ef4444; }
-        .gatilho-box.use { border-color: rgba(34, 197, 94, 0.35); }
-        .gatilho-box.use h4 { color: #22c55e; }
-
-        .nav-dots {
-            position: fixed;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            z-index: 100;
-        }
-
-        .nav-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(190, 183, 164, 0.3);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .nav-dot:hover, .nav-dot.active { background: var(--beige); transform: scale(1.2); }
-
-        .slide-counter {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            font-size: 0.8rem;
-            color: var(--gray);
-            z-index: 100;
-        }
-        .slide-counter span { color: var(--beige); font-weight: 600; }
-
-        .hint { font-size: 0.75rem; color: var(--gray); margin-top: 24px; }
-
-        .wa-cobranca-visual {
-            margin-top: 28px;
-            padding-top: 28px;
-            border-top: 1px solid rgba(190, 183, 164, 0.22);
-        }
-
-        .wa-cobranca-visual > h3 {
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--beige);
-            margin-bottom: 6px;
-        }
-
-        .wa-cobranca-visual > .wa-sub {
-            font-size: 0.88rem;
-            color: var(--gray-light);
-            margin-bottom: 18px;
-            line-height: 1.5;
-        }
-
-        .wa-cobranca-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
-            margin-bottom: 16px;
-        }
-
-        @media (max-width: 960px) {
-            .wa-cobranca-grid { grid-template-columns: 1fr; }
-        }
-
-        .wa-cobranca-item {
-            border: 1px solid rgba(190, 183, 164, 0.22);
-            border-radius: 12px;
-            padding: 16px 14px;
-            background: rgba(27, 21, 64, 0.45);
-            text-align: left;
-        }
-
-        .wa-cobranca-item .wa-etq {
-            font-size: 0.65rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--beige);
-            margin-bottom: 6px;
-        }
-
-        .wa-cobranca-item .wa-preco {
-            font-size: 1.65rem;
-            font-weight: 800;
-            color: var(--white);
-            line-height: 1.15;
-            margin-bottom: 8px;
-        }
-
-        .wa-cobranca-item .wa-preco small {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--gray-light);
-        }
-
-        .wa-cobranca-item .wa-txt {
-            font-size: 0.82rem;
-            color: var(--gray-light);
-            line-height: 1.5;
-        }
-
-        .wa-cobranca-item.wa-zero .wa-preco { color: #86efac; }
-
-        .wa-cobranca-nota {
-            font-size: 0.78rem;
-            color: var(--gray);
-            line-height: 1.5;
-            padding: 12px 14px;
-            border-radius: 8px;
-            background: rgba(190, 183, 164, 0.06);
-            border: 1px solid rgba(190, 183, 164, 0.12);
-        }
-
-        /* Fala completa: só o que o vendedor deve falar, do início ao fim */
-        .slide-fala-completa {
-            padding: 48px 56px 64px;
-        }
-        .slide-fala-completa .slide-main { max-width: 820px; margin: 0 auto; }
-        .fala-completa-wrap {
-            background: rgba(27, 21, 64, 0.5);
-            border: 1px solid rgba(190, 183, 164, 0.25);
-            border-radius: 16px;
-            padding: 40px 48px;
-        }
-        .fala-completa-wrap .norte-intro {
-            font-size: 1rem;
-            font-weight: 500;
-            color: var(--white);
-            text-align: center;
-            margin-bottom: 24px;
-            padding: 16px 24px;
-            background: rgba(190, 183, 164, 0.12);
-            border-radius: 10px;
-            border-left: 4px solid var(--beige);
-            line-height: 1.6;
-        }
-        .fala-completa-wrap h2 {
-            font-size: 1.35rem;
-            font-weight: 700;
-            color: var(--beige);
-            margin-bottom: 32px;
-            text-align: center;
-            letter-spacing: 1px;
-        }
-        .fala-bloco {
-            margin-bottom: 32px;
-        }
-        .fala-bloco:last-child { margin-bottom: 0; }
-        .fala-bloco .etiqueta {
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--beige);
-            opacity: 0.9;
-            margin-bottom: 10px;
-        }
-        .fala-bloco .texto {
-            font-size: 1.08rem;
-            line-height: 1.75;
-            color: var(--gray-light);
-        }
-        .fala-bloco .texto .destaque {
-            color: var(--white);
-            font-weight: 500;
-            display: block;
-            margin: 8px 0 4px;
-            padding-left: 16px;
-            border-left: 3px solid var(--beige);
-        }
-        .slide-fala-completa .gatilhos-sidebar { display: none; }
-
-        @media (max-width: 1024px) {
-            .slide { flex-direction: column; padding: 24px; }
-            .gatilhos-sidebar { width: 100%; position: static; max-height: none; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-            .nav-dots { display: none; }
-        }
-        @media (max-width: 640px) {
-            .gatilhos-sidebar { grid-template-columns: 1fr; }
-        }
-    </style>
+  @media (max-width: 768px) {
+    section { padding: 4.5rem 0; }
+    .hero { padding: 4rem 0; }
+    .hero-promises { gap: 1.5rem; }
+  }
+</style>
 </head>
 <body>
 
-    <nav class="nav-dots" id="navDots"></nav>
-    <div class="slide-counter"><span id="currentSlide">1</span> / 15</div>
+<div class="topbar">
+  <div class="container topbar-inner">
+    <div class="logo"><img src="images/feez-preto.png" alt="feez!" /></div>
+    <div class="topbar-tag">Script Closer · Uso Interno</div>
+  </div>
+</div>
 
-    <!-- 0. Fala completa do vendedor (só o que falar, do início ao fim) -->
-    <section class="slide slide-fala-completa" id="slide-0">
-        <div class="slide-main">
-            <div class="fala-completa-wrap">
-                <p class="norte-intro">Este é o seu norte na call: persuasivo e claro. Siga a ordem, use as frases e conduza a conversa até o próximo passo.</p>
-                <h2>Fala do vendedor — do início ao fim</h2>
+<section class="hero">
+  <div class="container hero-content">
+    <span class="eyebrow">Uso interno · Time Comercial</span>
+    <h1>Script Closer. <em>Do início ao fim</em> da call.</h1>
+    <p class="hero-sub">
+      Este é o norte da call comercial. O SDR já filtrou, o cliente já sabe o preço — o seu papel aqui é
+      <strong>validar o diagnóstico, apresentar o feez! e conduzir ao próximo passo.</strong> Sem empurrar, sem cansar.
+    </p>
+    <div class="hero-promises">
+      <div><strong>20–35min</strong><span>Duração ideal</span></div>
+      <div><strong>8 etapas</strong><span>Ordem fixa</span></div>
+      <div><strong>1 saída</strong><span>Próximo passo claro</span></div>
+    </div>
+  </div>
+</section>
 
-                <div class="fala-bloco">
-                    <div class="etiqueta">Etapa 1 — Quebra-gelo</div>
-                    <div class="texto">
-                        <span class="destaque">"Fulano, tudo bem? Como é que está a correria por aí hoje?"</span>
-                        <span class="destaque">"[Aqui, use 10–20 segundos para um bate-papo rápido ou uma piada leve sobre agenda cheia, pacientes, ou o clima, só para deixar a conversa mais leve antes de entrar no conteúdo]."</span>
-                    </div>
-                </div>
+<!-- Princípios -->
+<section class="philosophy">
+  <div class="container">
+    <span class="section-eyebrow">Seu papel na call</span>
+    <h2 class="section-title">Confirme, organize, <em>direcione.</em></h2>
+    <p class="section-lead">
+      Você não está aqui para convencer. Está para confirmar o diagnóstico do SDR, mostrar o feez! na prática
+      e guiar o cliente até a decisão. Quatro princípios que não se negociam.
+    </p>
+    <div class="philosophy-grid">
+      <div class="philosophy-item">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.6"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+        <h3>Valide antes de avançar</h3>
+        <p>Se o cliente não concorda com o diagnóstico do SDR, não avance para plano. Volte ao diagnóstico.</p>
+      </div>
+      <div class="philosophy-item">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.6"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <h3>Surpreenda sem cansar</h3>
+        <p>Mostre o sistema. Mas nunca mais de 5 min na mesma tela. Ritmo > completude.</p>
+      </div>
+      <div class="philosophy-item">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        <h3>Respeite a ordem</h3>
+        <p>Cada etapa prepara a próxima. Pule uma e você perde o controle da conversa.</p>
+      </div>
+      <div class="philosophy-item">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+        <h3>Direcione, não empurre</h3>
+        <p>SDR filtra. Você confirma. Sistema organiza. O fechamento acontece por lógica, não por pressão.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-                <div class="fala-bloco">
-                    <div class="etiqueta">Etapa 2 — Gancho inicial</div>
-                    <div class="texto">
-                        <span class="destaque">"Fulano, hoje a ideia é ser bem objetivo: em vez de ficar num bate‑papo chato, eu já quero ir direto para a prática e te mostrar o ouro do sistema, o nosso principal diferencial. Nosso sistema já cobre tudo o que vocês precisam de organização e gestão e, para eu te mostrar isso do jeito mais certeiro possível, deixa eu entender rapidinho: hoje vocês já utilizam algum sistema aí na clínica ou ainda fazem tudo em planilha e WhatsApp?"</span>
-                    </div>
-                </div>
+<!-- Etapas -->
+<section class="timeline">
+  <div class="container">
+    <span class="section-eyebrow">As 8 etapas da call</span>
+    <h2 class="section-title">Siga a ordem. <em>Use as frases.</em></h2>
+    <p class="section-lead">
+      Cada etapa tem tempo, objetivo e script-base. Adapte o tom ao cliente, não o conteúdo.
+    </p>
 
-                <div class="fala-bloco">
-                    <div class="etiqueta">Sistema atual (descoberta)</div>
-                    <div class="texto">
-                        Se ele <strong>já utiliza</strong> algum sistema: <span class="destaque">"Quais os pontos positivos?"</span> — em seguida: <span class="destaque">"Quais os pontos negativos desse sistema?"</span>
-                        Use as respostas para encaixar o Leev nas dores dele na hora de apresentar os caminhos.
-                    </div>
-                </div>
+    <div class="phases">
 
-                <div class="fala-bloco">
-                    <div class="etiqueta">Nova lógica (enquanto passa os slides 1–5)</div>
-                    <div class="texto">
-                        <span class="destaque">"Antes de falar de sistema ou plano, deixa eu te mostrar como a gente enxerga a operação de uma clínica."</span>
-                        Reforce com as frases dos slides: "Agenda cheia não significa clínica organizada." / "Paciente não é evento. É uma linha do tempo." / "Quando isso não está organizado, crescer só aumenta o caos."
-                    </div>
-                </div>
-
-                <div class="fala-bloco">
-                    <div class="etiqueta">Apresentação do sistema (demo)</div>
-                    <div class="texto">
-                        <span class="destaque">"Agora deixa eu te mostrar o sistema na prática, começando pelo ouro do nosso trabalho hoje, que é o agendamento de leads."</span>
-                        <br><br>
-                        <strong>1. Marketing / Captação (ouro dos leads)</strong> — <strong style="color: var(--beige);">[FALE ISSO]</strong>: "Vamos começar pelo ouro da operação, que é a aba de Marketing, onde fica toda a captação e o agendamento de leads. Na prática, é como se vocês tivessem um gestor de tráfego automático dentro da clínica: vocês pedem a campanha e o próprio sistema já começa a encher a agenda de oportunidades, sem depender de ninguém lembrando de responder."
-                        <br><br>
-                        <strong style="color: var(--beige);">[FALE ISSO]</strong>: "Olha o caminho que esse lead faz: ele entra pela campanha, o sistema identifica o ID da mensagem no WhatsApp e já começa uma conversa automática com foco em agendar. E o melhor é que vocês definem aqui os horários em que querem receber esses agendamentos e, conforme ele avança, eu consigo ir mudando o status para saber exatamente em que pé está cada oportunidade. E quando a gente agenda, o nosso robô já avisa o paciente sozinho, lembra ele no dia e também alguns dias antes, para reduzir falta e deixar a agenda sempre cheia."
-                        <br><br>
-                        <strong style="color: var(--beige);">[FALE ISSO — COBRANÇA WHATSAPP]</strong>: "Para ficar bem claro o custo de WhatsApp na prática: quando o paciente manda mensagem primeiro e vocês respondem dentro de 24 horas, na nossa referência isso não gera cobrança por disparo. Agora, quando é marketing, disparo de campanha, a referência que a gente usa na conversa com a clínica é cinquenta centavos. Quando é utilitário — agenda, atendimento, lembretes, boleto, consulta — a referência é meio centavo de real, ou seja, zero vírgula zero zero cinco. Tudo isso entra no relatório para não ter surpresa."
-                        <br><br>
-                        <strong>2. Agenda e dia a dia</strong> — <strong style="color: var(--beige);">[FALE ISSO]</strong>: "Agora que você viu de onde os leads vêm, aqui na agenda é onde eles chegam organizados, na visão de dia ou semana de vocês; nada de planilha ou papel perdido. O papel da clínica aqui é muito simples: pedir as campanhas e acompanhar a agenda, o resto o sistema faz para vocês."
-                        <br><br>
-                        <strong>3. Paciente e linha do tempo</strong> — <strong style="color: var(--beige);">[FALE ISSO]</strong>: "A partir do momento em que ele vira paciente, ele deixa de ser um evento solto. Aqui na guia de Pacientes fica a linha do tempo dele: tudo o que vocês fizeram com esse paciente, em ordem, fácil de achar."
-                        <br><br>
-                        <strong>4. Atendimento e prontuário</strong> — <strong style="color: var(--beige);">[FALE ISSO]</strong>: "Cada atendimento fica registrado e ligado ao paciente. Aqui no prontuário vocês conseguem gerar atestados e receituários em poucos cliques, todos já com o logo da clínica em marca d’água e com a assinatura digital do doutor, e o próprio sistema já envia esses documentos direto no WhatsApp do paciente."
-                        <br><br>
-                        <strong>5. Funcionalidades que surpreendem</strong> — <strong style="color: var(--beige);">[FALE ALGO COMO]</strong>: "Além disso, tudo o que é base para o dia a dia do doutor já está aqui: odontograma completo, anexos de exames e documentos do paciente, histórico, atestados, receituários, tudo centralizado. E, dependendo do que faz mais sentido para vocês, a gente ainda consegue puxar relatórios, controlar boletos, rodar campanhas e automações em cima da base. A ideia é que o doutor não sinta falta de nada e que o fluxo inteiro fique redondo dentro do sistema." Pausa e pergunte: "Isso faz sentido pro fluxo de vocês?"
-                        <br><br>
-                        <strong>5.1. (Se a clínica não for parceira de boleto)</strong> — <strong style="color: var(--beige);">[FALE ISSO — BOLETOS]</strong>: "No seu caso, que ainda não opera boletos com a gente, vale te mostrar rapidinho como funciona essa parte. Aqui a clínica consegue gerar boletos de forma automática, já vinculados aos atendimentos ou planos, e o sistema cuida da cobrança para você: envia, acompanha se foi pago, marca o que está em atraso e organiza tudo em uma visão só. Além disso, o paciente pode ter um acesso próprio para ver os boletos dele, baixar e acompanhar pagamentos, o que reduz muito retrabalho de cobrança no dia a dia."
-                        <br><br>
-                        <strong>6. Dashboard (fechamento)</strong> — <strong style="color: var(--beige);">[FALE ISSO]</strong>: "Para fechar, deixa eu te mostrar o dashboard. Tudo o que eu te mostrei até agora — Marketing trazendo lead, agenda, paciente, prontuário e boletos — aqui vira número: é metrificado, calculado e te mostrado em dados. Depois que a aba de Marketing faz o papel desse ‘gestor de tráfego automático’ e traz os leads, e que os boletos são gerados e cobrados automaticamente, aqui no painel vocês acompanham o resultado: quantos leads entraram, quantos viraram agendamento, qual o impacto em receita e quais campanhas performam melhor. É o lugar em que o dono da clínica olha e entende, em poucos segundos, se o funil está rodando como deveria."
-                        <br><br>
-                        Ritmo: 2–4 min por bloco. Se sentir que está pesado, encerre e siga para os caminhos (Controle/Performance).
-                    </div>
-                </div>
-
-                <div class="fala-bloco">
-                    <div class="etiqueta">Caminho 1 — Controle</div>
-                    <div class="texto">
-                        <span class="destaque">"Tem clínicas que já estão organizadas, mas travam quando tentam crescer."</span>
-                        <span class="destaque">"O Leev Controle é para crescer com método: organização + gestão + entrada ativa de novos pacientes, sem perder controle."</span>
-                    </div>
-                </div>
-
-                <div class="fala-bloco">
-                    <div class="etiqueta">Caminho 2 — Performance (só se o cenário justificar)</div>
-                    <div class="texto">
-                        <span class="destaque">"Agora, quando o problema não é gestão, e sim demanda, plano padrão não resolve."</span>
-                        <span class="destaque">"Nesse caso, a gente não vende plano. A gente desenha o crescimento junto com a clínica."</span>
-                    </div>
-                </div>
-
-                <div class="fala-bloco">
-                    <div class="etiqueta">Escolha guiada</div>
-                    <div class="texto">
-                        <span class="destaque">"Até aqui, fez sentido o que eu te mostrei? Você enxerga esse fluxo funcionando na sua clínica hoje?"</span>
-                        <span class="destaque">"Diante do que a gente conversou, qual desses cenários mais se parece com a sua clínica hoje?"</span>
-                        Se ele hesitar: <span class="destaque">"O que te faria ter segurança para escolher?"</span>
-                    </div>
-                </div>
-
-                <div class="fala-bloco">
-                    <div class="etiqueta">Resultados para a clínica</div>
-                    <div class="texto">
-                        <span class="destaque">"Traduzindo isso tudo para o dia a dia: o que muda para a sua clínica é que toda a gestão fica concentrada em um único sistema — do lead ao boleto pago."</span>
-                        <span class="destaque">"Você ganha mais organização no dia a dia, menos dependência de planilha e memória da equipe, mais pacientes chegando com o módulo de marketing e campanhas inteligentes, e um controle financeiro muito mais assertivo, olhando para a realidade da sua clínica, não para um modelo genérico."</span>
-                    </div>
-                </div>
-
-                <div class="fala-bloco">
-                    <div class="etiqueta">Próximo passo — liberar demo</div>
-                    <div class="texto">
-                        <span class="destaque">"O próximo passo não é fechar nada agora. É configurar o Leev no fluxo real da sua clínica e validar isso na prática com vocês."</span>
-                        <span class="destaque">"Nós vamos liberar uma demo de 7 dias para você e para o seu time usarem de verdade. A única coisa que eu vou te pedir é: já passar o login e a senha para quem cuida de agendamento, financeiro e gestão, para que todo mundo possa testar e te dar um feedback se o sistema encaixa na rotina de vocês."</span>
-                        <span class="destaque">"No oitavo dia, a gente volta a se falar em uma reunião rápida só para ouvir esse feedback e, se fizer sentido, decidir juntos o melhor formato de uso."</span>
-                        <span class="destaque">"Qual horário funciona melhor para você nesse oitavo dia para a gente já deixar essa call travada na sua agenda?"</span>
-                        <span class="destaque">"Qualquer dúvida que você ou o seu time tiverem durante esse período, pode me chamar no WhatsApp ou me ligar direto."</span>
-                    </div>
-                </div>
-            </div>
+      <div class="phase">
+        <div class="phase-week">Etapa<strong>01</strong></div>
+        <div>
+          <div class="phase-title">Abertura<span class="phase-title-sub">1–3 min · posicionar a call</span></div>
         </div>
-        <aside class="gatilhos-sidebar"></aside>
-    </section>
-
-    <!-- 1. Seu papel na call -->
-    <section class="slide" id="slide-1">
-        <div class="slide-main">
-            <span class="slide-label">Seu norte</span>
-            <h2 class="slide-title">Como conduzir a call do início ao fim</h2>
-            <div class="script-block">
-                <p>Seu papel é <strong>validar o diagnóstico</strong> e <strong>apresentar o sistema</strong> — funcionalidades básicas e complexas — para surpreender o Dr. A clínica escolhe com base no que você mostrou.</p>
-                <p style="margin-top: 16px;">Você mostra sim o sistema. O que não pode é cair numa apresentação cansativa: sem ritmo, sem pausa, tudo de uma vez.</p>
-                <p class="quote" style="margin-top: 24px; border: none; padding: 0;">Surpreenda com o que o Leev faz. Mantenha a apresentação dinâmica e objetiva. Confirme, organize, direcione.</p>
-            </div>
+        <div class="phase-content">
+          <p><strong>Objetivo:</strong> transferir confiança do SDR para você e deixar claro que esta é uma call decisória, não exploratória.</p>
+          <span class="quote">Fulano, obrigado pelo tempo. O [nome do SDR] já me passou um resumo do cenário da sua clínica. Hoje a ideia é validar se o diagnóstico faz sentido e te apresentar o feez! e os caminhos que encaixam no seu cenário. Tudo bem?</span>
+          <ul>
+            <li>Evita "me conta tudo de novo"</li>
+            <li>Transfere a confiança do SDR</li>
+            <li>Deixa claro que é call decisória</li>
+          </ul>
         </div>
-        <aside class="gatilhos-sidebar">
-            <div class="gatilho-box regra">
-                <h4>Regra</h4>
-                <p>Mostre o sistema. Surpreenda. Mas não canse.</p>
-            </div>
-            <div class="gatilho-box nunca">
-                <h4>Evite</h4>
-                <ul>
-                    <li>Apresentação longa e monótona</li>
-                    <li>Prometer o que não está no plano</li>
-                    <li>Explicar sem parar (sem dar espaço ao Dr.)</li>
-                </ul>
-            </div>
-        </aside>
-    </section>
+      </div>
 
-    <!-- 2. Estrutura da call -->
-    <section class="slide" id="slide-2">
-        <div class="slide-main">
-            <span class="slide-label">Estrutura</span>
-            <h2 class="slide-title">Call de apresentação do sistema (20–35 min)</h2>
-            <div class="script-block">
-                <p style="margin-bottom: 12px; color: var(--beige);">Siga esta ordem. Cada etapa prepara a próxima. Pule uma e você perde o controle da conversa.</p>
-                <ul>
-                    <li>1. Abertura + alinhamento (3–5 min)</li>
-                    <li>2. Confirmação do diagnóstico do SDR (5–7 min)</li>
-                    <li>3. Sistema atual — já usa algo? Pontos positivos e negativos (2–4 min)</li>
-                    <li>4. Nova lógica — slides 1–5 (5–8 min)</li>
-                    <li>5. Demo do sistema — funcionalidades que surpreendem, sem cansar (8–12 min)</li>
-                    <li>6. Caminhos possíveis — planos (5–8 min)</li>
-                    <li>7. Escolha guiada (3–5 min)</li>
-                    <li>8. Próximo passo claro (3–5 min)</li>
-                </ul>
-            </div>
+      <div class="phase">
+        <div class="phase-week">Etapa<strong>02</strong></div>
+        <div>
+          <div class="phase-title">Confirmação do Diagnóstico<span class="phase-title-sub">3–5 min · base de toda a call</span></div>
         </div>
-        <aside class="gatilhos-sidebar">
-            <div class="gatilho-box">
-                <h4>Seu norte aqui</h4>
-                <p>Respeite o tempo. Não pule a confirmação do diagnóstico. A ordem é o que torna a call persuasiva.</p>
-            </div>
-        </aside>
-    </section>
-
-    <!-- 3. Abertura -->
-    <section class="slide" id="slide-3">
-        <div class="slide-main">
-            <span class="slide-label">Abertura da call (1–3 min)</span>
-            <h2 class="slide-title">O que dizer</h2>
-            <div class="script-block">
-                <p class="quote">"Fulano, obrigado pelo tempo. O [nome do SDR] já me passou um resumo do cenário da sua clínica. Hoje a ideia é validar se o diagnóstico faz sentido e te apresentar o sistema e os caminhos que fazem sentido pro seu cenário. Tudo bem?"</p>
-            </div>
-            <p class="hint">Faça isso: posicione a call como apresentação do sistema, reforce que o SDR já trouxe o contexto e peça permissão para validar e mostrar os caminhos.</p>
+        <div class="phase-content">
+          <p><strong>Objetivo:</strong> fazer o cliente concordar ou corrigir em voz alta. Essa é a base para encaixar o plano certo depois.</p>
+          <span class="quote">Pelo que o [SDR] me trouxe, hoje vocês atendem X pacientes, têm estrutura pra atender mais, mas a entrada de novos pacientes é instável e difícil de prever. É isso mesmo ou tem algo importante que eu preciso ajustar?</span>
+          <ul>
+            <li>Se corrige: refine o diagnóstico e siga</li>
+            <li>Se concorda: consciência validada, avance</li>
+            <li>Regra dura: sem concordância, não avance para plano</li>
+          </ul>
         </div>
-        <aside class="gatilhos-sidebar">
-            <div class="gatilho-box use">
-                <h4>Por que essa abertura funciona</h4>
-                <ul>
-                    <li>Transfere confiança do SDR para você</li>
-                    <li>Evita "me conta tudo de novo"</li>
-                    <li>Deixa claro: é call decisória, não exploratória</li>
-                </ul>
-            </div>
-        </aside>
-    </section>
+      </div>
 
-    <!-- 4. Confirmação do diagnóstico -->
-    <section class="slide" id="slide-4">
-        <div class="slide-main">
-            <span class="slide-label">Confirmação do diagnóstico (3–5 min)</span>
-            <h2 class="slide-title">Script-base</h2>
-            <div class="script-block">
-                <p class="quote">"Pelo que o [SDR] me trouxe, hoje vocês atendem X pacientes, têm estrutura pra atender mais, mas a entrada de novos pacientes é instável e difícil de prever. É isso mesmo ou tem algo importante que eu preciso ajustar?"</p>
-            </div>
-            <p class="hint">Faça o cliente concordar ou corrigir em voz alta. Essa é a base para encaixar o plano certo depois.</p>
+      <div class="phase">
+        <div class="phase-week">Etapa<strong>03</strong></div>
+        <div>
+          <div class="phase-title">Sistema Atual<span class="phase-title-sub">2–4 min · descoberta rápida</span></div>
         </div>
-        <aside class="gatilhos-sidebar">
-            <div class="gatilho-box use">
-                <h4>Se ele corrige</h4>
-                <p>Ótimo: refine o diagnóstico e siga.</p>
-            </div>
-            <div class="gatilho-box use">
-                <h4>Se ele concorda</h4>
-                <p>Consciência validada. Avance.</p>
-            </div>
-            <div class="gatilho-box regra">
-                <h4>Regra dura</h4>
-                <p>Se não concordar com o diagnóstico, <strong>não avance</strong> para plano. Volte ao diagnóstico.</p>
-            </div>
-        </aside>
-    </section>
-
-    <!-- 5. Sistema atual -->
-    <section class="slide" id="slide-5">
-        <div class="slide-main">
-            <span class="slide-label">Sistema atual (2–4 min)</span>
-            <h2 class="slide-title">Perguntas de descoberta</h2>
-            <div class="script-block">
-                <p class="quote">"Sua clínica já utiliza algum sistema hoje?"</p>
-                <p style="margin-top: 16px;">Se sim, em sequência:</p>
-                <p class="quote" style="margin-top: 8px;">"Quais os pontos positivos?"</p>
-                <p class="quote" style="margin-top: 8px;">"Quais os pontos negativos desse sistema?"</p>
-            </div>
-            <p class="hint">Use as respostas depois: na hora de apresentar Controle ou Performance, encaixe o Leev nos pontos negativos que ele citou e reforce os positivos que ele quer manter.</p>
+        <div class="phase-content">
+          <p><strong>Objetivo:</strong> saber o que preservar e o que atacar. Use as respostas depois para encaixar o feez! nas dores dele.</p>
+          <span class="quote">Sua clínica já utiliza algum sistema hoje? Quais os pontos positivos? E os pontos negativos desse sistema?</span>
+          <ul>
+            <li>Anote os positivos — você vai reforçar</li>
+            <li>Anote os negativos — você vai atacar na demo</li>
+            <li>Nunca compare com concorrente pelo nome</li>
+          </ul>
         </div>
-        <aside class="gatilhos-sidebar">
-            <div class="gatilho-box use">
-                <h4>Seu objetivo aqui</h4>
-                <ul>
-                    <li>Saber o que preservar (positivos) e o que atacar (negativos)</li>
-                    <li>Falar direto com as dores dele quando mostrar o sistema</li>
-                </ul>
-            </div>
-        </aside>
-    </section>
+      </div>
 
-    <!-- 6. Apresentação da nova lógica -->
-    <section class="slide" id="slide-6">
-        <div class="slide-main">
-            <span class="slide-label">Apresentação da nova lógica — slides 1–5 (5–8 min)</span>
-            <h2 class="slide-title">Script-chave (essência)</h2>
-            <div class="script-block">
-                <p class="quote">"Antes de falar de sistema ou plano, deixa eu te mostrar como a gente enxerga a operação de uma clínica."</p>
-                <p style="margin-top: 20px;">Use os slides e repita estas frases com clareza:</p>
-                <ul>
-                    <li>"Agenda cheia não significa clínica organizada."</li>
-                    <li>"Paciente não é evento. É uma linha do tempo."</li>
-                    <li>"Quando isso não está organizado, crescer só aumenta o caos."</li>
-                </ul>
-                <p style="margin-top: 16px; color: var(--beige); font-size: 0.95rem;">Nesta etapa é só conceito. A demo do sistema (telas, funcionalidades) vem no próximo bloco.</p>
-            </div>
+      <div class="phase">
+        <div class="phase-week">Etapa<strong>04</strong></div>
+        <div>
+          <div class="phase-title">Nova Lógica<span class="phase-title-sub">5–8 min · só conceito, sem tela</span></div>
         </div>
-        <aside class="gatilhos-sidebar">
-            <div class="gatilho-box regra">
-                <h4>Nesta etapa (só conceito)</h4>
-                <ul>
-                    <li>Ainda não entre em funcionalidade nem mostre tela</li>
-                    <li>Não fale de lead ainda</li>
-                </ul>
-            </div>
-            <div class="gatilho-box use">
-                <h4>Meta</h4>
-                <p>Ele pensar: "Eles entendem meu problema melhor do que eu."</p>
-            </div>
-        </aside>
-    </section>
-
-    <!-- 7. Apresentação do sistema (roteiro + ritmo) -->
-    <section class="slide" id="slide-7">
-        <div class="slide-main">
-            <span class="slide-label">Apresentação do sistema</span>
-            <h2 class="slide-title">Roteiro da demo — o que mostrar e o que dizer</h2>
-            <div class="script-block">
-                <p class="quote">"Agora deixa eu te mostrar o sistema na prática, começando pelo ouro do nosso trabalho hoje, que é o agendamento de leads."</p>
-                <p style="margin-top: 20px; margin-bottom: 8px;"><strong>Ordem da apresentação (2–4 min por bloco, sempre de forma leve e natural):</strong></p>
-                <ol style="list-style: decimal; padding-left: 24px; color: var(--gray-light); margin-top: 12px;">
-                    <li style="margin-bottom: 12px;"><strong style="color: var(--white);">Marketing / Captação (ouro dos leads)</strong> — <strong style="color: var(--beige);">[FALE ISSO]</strong>: "Vamos começar pelo ouro da operação, que é a aba de Marketing, onde fica toda a captação e o agendamento de leads. Na prática, é como se vocês tivessem um gestor de tráfego automático dentro da clínica: vocês pedem a campanha e o próprio sistema já começa a encher a agenda de oportunidades, sem depender de ninguém lembrando de responder."</li>
-                    <li style="margin-bottom: 12px;"><strong style="color: var(--beige);">[FALE ISSO]</strong>: "Olha o caminho que esse lead faz: ele entra pela campanha, o sistema identifica o ID da mensagem no WhatsApp e já começa uma conversa automática com foco em agendar. E o melhor é que vocês definem aqui os horários em que querem receber esses agendamentos e, conforme ele avança, eu consigo ir mudando o status para saber exatamente em que pé está cada oportunidade."</li>
-                    <li style="margin-bottom: 12px;"><strong style="color: var(--beige);">[FALE ISSO — COBRANÇA WHATSAPP]</strong>: "Para ficar bem claro o custo de WhatsApp na prática: quando o paciente manda mensagem primeiro e vocês respondem dentro de 24 horas, na nossa referência isso não gera cobrança por disparo. Quando é marketing, disparo de campanha, a referência que a gente usa na conversa com a clínica é cinquenta centavos. Quando é utilitário — agenda, atendimento, lembretes, boleto, consulta — a referência é meio centavo de real, zero vírgula zero zero cinco. Tudo isso entra no relatório para não ter surpresa."</li>
-                    <li style="margin-bottom: 12px;"><strong style="color: var(--white);">Agenda e dia a dia</strong> — <strong style="color: var(--beige);">[FALE ISSO]</strong>: "Agora que você viu de onde os leads vêm, aqui na agenda é onde eles chegam organizados, na visão de dia ou semana de vocês; nada de planilha ou papel perdido."</li>
-                    <li style="margin-bottom: 12px;"><strong style="color: var(--white);">Paciente e linha do tempo</strong> — <strong style="color: var(--beige);">[FALE ISSO]</strong>: "A partir do momento em que ele vira paciente, ele deixa de ser um evento solto. Aqui fica a linha do tempo dele: tudo o que vocês fizeram com esse paciente, em ordem, fácil de achar."</li>
-                    <li style="margin-bottom: 12px;"><strong style="color: var(--white);">Atendimento e prontuário</strong> — <strong style="color: var(--beige);">[FALE ISSO]</strong>: "Cada atendimento fica registrado e ligado ao paciente. Aqui no prontuário vocês conseguem gerar atestados e receituários em poucos cliques, todos já com o logo da clínica em marca d’água e com a assinatura digital do doutor, e o próprio sistema já envia esses documentos direto no WhatsApp do paciente."</li>
-                    <li style="margin-bottom: 12px;"><strong style="color: var(--white);">Funcionalidades que surpreendem</strong> — <strong style="color: var(--beige);">[FALE ALGO COMO]</strong>: "Além disso, tudo o que é base para o dia a dia do doutor já está aqui: odontograma completo, anexos de exames e documentos do paciente, histórico, atestados, receituários, tudo centralizado. E, dependendo do que faz mais sentido para vocês, a gente ainda consegue puxar relatórios, controlar boletos, rodar campanhas e automações em cima da base. A ideia é que o doutor não sinta falta de nada e que o fluxo inteiro fique redondo dentro do sistema." Depois pergunte: "Isso faz sentido pro fluxo de vocês?"</li>
-                    <li style="margin-bottom: 12px;"><strong style="color: var(--white);">Dashboard (fechamento)</strong> — <strong style="color: var(--beige);">[FALE ISSO]</strong>: "Para fechar, deixa eu te mostrar o dashboard. Tudo o que eu te mostrei até agora — Marketing trazendo lead, agenda, paciente, prontuário — aqui vira número: é metrificado, calculado e te mostrado em dados. Depois que a aba de Marketing faz o papel desse ‘gestor de tráfego automático’ e traz os leads, aqui no painel vocês acompanham o resultado: quantos leads entraram, quantos viraram agendamento, quais campanhas performam melhor. É o lugar em que o dono da clínica olha e entende, em poucos segundos, se o funil está rodando como deveria."</li>
-                </ol>
-                <p style="margin-top: 20px; color: var(--beige);">Ritmo: não fique mais de 5 min na mesma tela. Se sentir que está pesado, encerre o bloco e siga para os caminhos (Controle/Performance).</p>
-
-                <div class="wa-cobranca-visual">
-                    <h3>Mapa rápido — cobrança WhatsApp (mostrar ou ler)</h3>
-                    <p class="wa-sub">Três caixas na ordem: o que não cobra na referência, o que é campanha, o que é operação do dia a dia.</p>
-                    <div class="wa-cobranca-grid">
-                        <div class="wa-cobranca-item wa-zero">
-                            <div class="wa-etq">1. Paciente fala primeiro</div>
-                            <div class="wa-preco">R$ 0 <small>na referência</small></div>
-                            <p class="wa-txt">Vocês recebem a mensagem do paciente e respondem dentro de <strong>24 horas</strong>. Na referência comercial Leev: <strong>sem cobrança</strong> por esse tipo de janela.</p>
-                        </div>
-                        <div class="wa-cobranca-item">
-                            <div class="wa-etq">2. Marketing / campanha</div>
-                            <div class="wa-preco">R$ 0,50</div>
-                            <p class="wa-txt">Disparo ativo, campanha, captação em massa. Referência para falar com o cliente: <strong>cinquenta centavos</strong> (por disparo na lógica que vocês usam no fechamento).</p>
-                        </div>
-                        <div class="wa-cobranca-item">
-                            <div class="wa-etq">3. Utilitário</div>
-                            <div class="wa-preco">R$ 0,005</div>
-                            <p class="wa-txt">Agenda, atendimento, lembretes, boleto, consulta e mensagens operacionais. Referência: <strong>meio centavo de real</strong> (0,5 centavo de real).</p>
-                        </div>
-                    </div>
-                    <p class="wa-cobranca-nota"><strong>Closer:</strong> use este mapa na tela compartilhada ou aponte com o dedo na conversa. Valores são referência para explicação comercial; se financeiro atualizar tabela, ajuste só os números aqui. A Meta trabalha com categorias e janelas; na fala você resume em &quot;recebeu em 24h / marketing / utilitário&quot;.</p>
-                </div>
-            </div>
+        <div class="phase-content">
+          <p><strong>Objetivo:</strong> fazer o cliente pensar "eles entendem meu problema melhor do que eu". Ainda não mostre tela.</p>
+          <span class="quote">Antes de falar de sistema ou plano, deixa eu te mostrar como a gente enxerga a operação de uma clínica.</span>
+          <ul>
+            <li>"Agenda cheia não significa clínica organizada."</li>
+            <li>"Paciente não é evento. É uma linha do tempo."</li>
+            <li>"Quando isso não está organizado, crescer só aumenta o caos."</li>
+          </ul>
         </div>
-        <aside class="gatilhos-sidebar">
-            <div class="gatilho-box use">
-                <h4>Seu norte aqui</h4>
-                <p>A apresentação do sistema está no script. Siga a ordem; use as frases; mantenha o ritmo.</p>
-            </div>
-            <div class="gatilho-box">
-                <h4>Custo WhatsApp</h4>
-                <p>Se perguntarem de preço, role até o mapa de três caixas no fim deste slide ou leia o bloco [FALE ISSO — COBRANÇA WHATSAPP] na lista.</p>
-            </div>
-            <div class="gatilho-box nunca">
-                <h4>Evite</h4>
-                <ul>
-                    <li>Mais de 5 min na mesma tela</li>
-                    <li>Pular a demo (o script inclui a apresentação)</li>
-                    <li>Ignorar sinais de cansaço</li>
-                </ul>
-            </div>
-        </aside>
-    </section>
+      </div>
 
-    <!-- 8. Caminho Controle -->
-    <section class="slide" id="slide-8">
-        <div class="slide-main">
-            <span class="slide-label">Caminho 1</span>
-            <h2 class="slide-title">Leev Controle</h2>
-            <div class="script-block">
-                <p class="quote">"Tem clínicas que já estão organizadas, mas travam quando tentam crescer."</p>
-                <p class="quote">"O Leev Controle é para crescer com método: organização + gestão + entrada ativa de novos pacientes, sem perder controle."</p>
-            </div>
+      <div class="phase">
+        <div class="phase-week">Etapa<strong>05</strong></div>
+        <div>
+          <div class="phase-title">Demo do Sistema<span class="phase-title-sub">8–12 min · ordem fixa, ritmo leve</span></div>
         </div>
-        <aside class="gatilhos-sidebar">
-            <div class="gatilho-box use">
-                <h4>Seu norte aqui</h4>
-                <ul>
-                    <li>Fale de crescimento, mas sempre condicionado a processo</li>
-                    <li>Deixe claro: não é mágica, é método</li>
-                </ul>
-            </div>
-        </aside>
-    </section>
-
-    <!-- 9. Caminho Performance -->
-    <section class="slide" id="slide-9">
-        <div class="slide-main">
-            <span class="slide-label">Caminho 2</span>
-            <h2 class="slide-title">Leev Performance</h2>
-            <div class="script-block">
-                <p class="quote">"Agora, quando o problema não é gestão, e sim demanda, plano padrão não resolve."</p>
-                <p class="quote">"Nesse caso, a gente não vende plano. A gente desenha o crescimento junto com a clínica."</p>
-            </div>
+        <div class="phase-content">
+          <p><strong>Objetivo:</strong> surpreender com o que o feez! faz. Ordem fixa, 2–4 min por bloco. Se pesar, encerra e segue.</p>
+          <span class="quote">Agora deixa eu te mostrar o feez! na prática, começando pelo ouro do nosso trabalho hoje, que é o agendamento de leads.</span>
+          <ul>
+            <li>1. Marketing / Captação (gestor de tráfego automático)</li>
+            <li>2. Agenda inteligente + WhatsApp</li>
+            <li>3. Paciente e linha do tempo (CRM)</li>
+            <li>4. Prontuário + assinatura digital</li>
+            <li>5. Gestão de boletos e cobrança automática</li>
+            <li>6. Dashboard — fecha mostrando tudo virando número</li>
+          </ul>
         </div>
-        <aside class="gatilhos-sidebar">
-            <div class="gatilho-box regra">
-                <h4>Regra dura</h4>
-                <ul>
-                    <li>Nunca ofereça Performance se ele não demonstrou problema de demanda</li>
-                    <li>Nunca fale preço aqui</li>
-                    <li>Nunca detalhe motor</li>
-                </ul>
-            </div>
-            <div class="gatilho-box">
-                <h4>Posicionamento</h4>
-                <p>Performance é posicionamento premium. Não empurre.</p>
-            </div>
-        </aside>
-    </section>
+      </div>
 
-    <!-- 10. Regra de decisão -->
-    <section class="slide" id="slide-10">
-        <div class="slide-main">
-            <span class="slide-label">Regra de decisão</span>
-            <h2 class="slide-title">Quando indicar cada plano</h2>
-            <div class="script-block">
-                <p class="quote">"Se o gargalo é organizar e crescer com processo, o caminho é Controle."</p>
-                <p class="quote">"Se a clínica já está redonda e o desafio é escala de demanda, o caminho é Performance."</p>
-            </div>
+      <div class="phase">
+        <div class="phase-week">Etapa<strong>06</strong></div>
+        <div>
+          <div class="phase-title">Caminhos Possíveis<span class="phase-title-sub">5–8 min · planos feez!</span></div>
         </div>
-        <aside class="gatilhos-sidebar">
-            <div class="gatilho-box use">
-                <h4>Filtro rápido</h4>
-                <p>Pergunta de corte: "Hoje o gargalo é método de operação ou volume de demanda?"</p>
-            </div>
-        </aside>
-    </section>
-
-    <!-- 11. Escolha guiada -->
-    <section class="slide" id="slide-11">
-        <div class="slide-main">
-            <span class="slide-label">Escolha guiada (1–3 min)</span>
-            <h2 class="slide-title">O que dizer</h2>
-            <div class="script-block">
-                <p class="quote">"Diante do que a gente conversou, qual desses cenários mais se parece com a sua clínica hoje?"</p>
-                <p style="margin-top: 20px;">Se ele hesita:</p>
-                <p class="quote">"O que te faria ter segurança para escolher?"</p>
-                <div style="margin-top: 22px; padding: 14px 16px; border: 1px solid rgba(190,183,164,0.28); border-radius: 10px; background: rgba(190,183,164,0.06);">
-                    <p style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--beige); margin-bottom: 8px; font-weight: 700;">Regra comercial — parceiros</p>
-                    <ul style="margin: 0; padding-left: 20px;">
-                        <li>Para parceiros de gestão e antecipação, liberar apenas o módulo de gestão de boletos.</li>
-                        <li>Os demais módulos ficam visíveis no sistema para gerar curiosidade e apoiar o avanço comercial, sem liberação de uso nesta etapa.</li>
-                        <li>Motor de crédito gratuito somente para parceiros de antecipação.</li>
-                    </ul>
-                </div>
-            </div>
+        <div class="phase-content">
+          <p><strong>Objetivo:</strong> apresentar Pré-formado e Empresarial como caminhos diferentes, não como "básico vs. premium".</p>
+          <span class="quote">Agora que você viu como funciona, existem dois caminhos que fazem sentido dependendo do momento da clínica.</span>
+          <ul>
+            <li>Pré-formado (R$ 98/mês) — estudante/recém-formado, mediante comprovação</li>
+            <li>Empresarial (R$ 298,90/mês) — clínicas e empresas, 1 acesso incluso</li>
+            <li>Ambos têm 100% das funcionalidades liberadas</li>
+            <li>Diferença é público, não feature</li>
+          </ul>
         </div>
-        <aside class="gatilhos-sidebar">
-            <div class="gatilho-box use">
-                <h4>Se ele escolhe</h4>
-                <p>Avance para o próximo passo.</p>
-            </div>
-            <div class="gatilho-box nunca">
-                <h4>Nunca</h4>
-                <ul>
-                    <li>Empurre um plano</li>
-                    <li>Justifique preço antes da escolha</li>
-                </ul>
-            </div>
-        </aside>
-    </section>
+      </div>
 
-    <!-- 12. Próximo passo -->
-    <section class="slide" id="slide-12">
-        <div class="slide-main">
-            <span class="slide-label">Próximo passo claro (3–5 min)</span>
-            <h2 class="slide-title">Script</h2>
-            <div class="script-block">
-                <p class="quote">"O próximo passo não é fechar nada agora. É configurar o Leev no fluxo real da sua clínica e validar isso na prática."</p>
-                <p style="margin-top: 20px;">Controle: onboarding guiado. Performance: diagnóstico aprofundado.</p>
-                <p style="margin-top: 16px;">Sempre feche com: <strong>data</strong>, <strong>ação</strong>, <strong>responsável</strong>. Sem ambiguidade.</p>
-            </div>
+      <div class="phase">
+        <div class="phase-week">Etapa<strong>07</strong></div>
+        <div>
+          <div class="phase-title">Escolha Guiada<span class="phase-title-sub">1–3 min · devolver a decisão</span></div>
         </div>
-        <aside class="gatilhos-sidebar">
-            <div class="gatilho-box">
-                <h4>Seu norte aqui</h4>
-                <p>Encerre com ação concreta. Sem pressão, sem deixar "a gente vê".</p>
-            </div>
-        </aside>
-    </section>
-
-    <!-- 13. Erros -->
-    <section class="slide" id="slide-13">
-        <div class="slide-main">
-            <span class="slide-label">Erros que o closer não pode cometer</span>
-            <h2 class="slide-title">O que não fazer</h2>
-            <div class="script-block">
-                <p style="margin-bottom: 12px; color: var(--beige);">Evite estes erros. Cada um tira você do norte e enfraquece o fechamento.</p>
-                <ul>
-                    <li>Mostrar tudo (vira commodity)</li>
-                    <li>Falar de preço cedo (antes da escolha)</li>
-                    <li>Comparar com concorrente (desvaloriza)</li>
-                    <li>Prometer lead (cria expectativa errada)</li>
-                    <li>"Convencer" o cliente (você direciona, não empurra)</li>
-                </ul>
-                <p style="margin-top: 28px; font-size: 1rem; color: var(--beige);">SDR filtra. Você confirma e direciona. Sistema organiza. Crescimento vem com método.</p>
-                <p style="margin-top: 16px; font-size: 0.95rem;">Siga este script: ele protege margem, reduz churn e fecha com quem deve fechar.</p>
-            </div>
+        <div class="phase-content">
+          <p><strong>Objetivo:</strong> fazer ele escolher em voz alta. Se hesitar, descobrir a trava real.</p>
+          <span class="quote">Diante do que a gente conversou, qual desses caminhos mais se parece com a sua clínica hoje?</span>
+          <span class="quote">Se hesitar: O que te faria ter segurança para escolher?</span>
+          <ul>
+            <li>Nunca empurre um plano</li>
+            <li>Nunca justifique preço antes da escolha</li>
+            <li>Silêncio depois da pergunta é aliado</li>
+          </ul>
         </div>
-        <aside class="gatilhos-sidebar">
-            <div class="gatilho-box nunca">
-                <h4>Nunca</h4>
-                <p>Qualquer um desses erros quebra o posicionamento do closer.</p>
-            </div>
-        </aside>
-    </section>
+      </div>
 
-    <!-- 14. Biblioteca de objeções -->
-    <section class="slide" id="slide-14">
-        <div class="slide-main">
-            <span class="slide-label">Biblioteca de objeções</span>
-            <h2 class="slide-title">Como responder, sem perder o controle</h2>
-            <div class="script-block">
-                <p class="quote">Use estas respostas como base. Adapte para a realidade da clínica, sem prometer o que o Leev não entrega.</p>
-                <ul>
-                    <li><strong>Objeção: "Já tenho sistema, não quero trocar agora."</strong><br>
-                        <strong>[FALE ISSO]</strong>: "Perfeito, Fulano. A ideia aqui não é fazer você trocar nada hoje. O que eu quero é te mostrar onde o Leev entra justamente nos pontos que o seu sistema atual não cobre bem — principalmente em marketing, agenda e cobrança automática. Depois desses 7 dias de uso, é você quem vai me dizer se faz sentido manter os dois ou substituir algum."</li>
-                    <li><strong>Objeção: "Não quero mexer com campanha nem com WhatsApp agora."</strong><br>
-                        <strong>[FALE ISSO]</strong>: "Totalmente compreensível. A boa notícia é que o papel da clínica aqui é simples: pedir as campanhas e acompanhar a agenda. O resto — responder lead, lembrar paciente, cobrar boleto — o sistema faz. A proposta é justamente tirar esse peso da equipe, não aumentar."</li>
-                    <li><strong>Objeção: "Minha recepção não dá conta de mais um sistema."</strong><br>
-                        <strong>[FALE ISSO]</strong>: "É exatamente por isso que o Leev existe. Em vez de recepção ficar entre planilha, WhatsApp e sistema de agenda, ela passa a olhar tudo em um lugar só. A curva de aprendizado é pequena, e durante a demo de 7 dias a gente foca em deixar o fluxo o mais simples possível para o seu time."</li>
-                    <li><strong>Objeção: "Tenho medo de custo de WhatsApp e boleto."</strong><br>
-                        <strong>[FALE ISSO]</strong>: "No WhatsApp a gente resume em três regras: se o paciente manda primeiro e vocês respondem em até 24 horas, na nossa referência não cobra. Campanha de marketing, referência de cinquenta centavos. Tudo que é utilitário — agenda, lembrete, boleto, consulta, atendimento — referência de meio centavo de real. E fica registrado no relatório. No boleto, a automação costuma pagar o custo com menos falta e menos cobrança manual."</li>
-                    <li><strong>Objeção: "Não sei se a equipe vai usar."</strong><br>
-                        <strong>[FALE ISSO]</strong>: "Por isso a gente trabalha com a demo guiada. Por 7 dias, seu time de agenda, financeiro e gestão usa o sistema na prática. No oitavo dia, em vez de eu te ‘convencer’, é você quem traz o feedback do time sobre o que funcionou e o que não encaixou. A decisão fica baseada em uso real, não em promessa minha."</li>
-                    <li><strong>Objeção: "Sou parceiro e quero liberar tudo agora."</strong><br>
-                        <strong>[FALE ISSO]</strong>: "No modelo de parceiro de gestão e antecipação, a liberação inicial é focada na gestão de boletos. Os outros módulos ficam visíveis para você enxergar o potencial do sistema e evoluir no momento certo. E no caso de antecipação, o motor de crédito entra gratuito."</li>
-                </ul>
-            </div>
+      <div class="phase">
+        <div class="phase-week">Etapa<strong>08</strong></div>
+        <div>
+          <div class="phase-title">Próximo Passo<span class="phase-title-sub">3–5 min · data · ação · responsável</span></div>
         </div>
-        <aside class="gatilhos-sidebar">
-            <div class="gatilho-box use">
-                <h4>Seu norte aqui</h4>
-                <p>Objeção não é ataque. É pedido de clareza. Use as respostas para direcionar, não para brigar.</p>
-            </div>
-        </aside>
-    </section>
+        <div class="phase-content">
+          <p><strong>Objetivo:</strong> fechar com ação concreta. Sem "a gente vê", sem ambiguidade.</p>
+          <span class="quote">O próximo passo não é fechar nada agora. É ativar o feez! no fluxo real da sua clínica pelos 7 dias de teste e validar isso na prática com a sua equipe.</span>
+          <span class="quote">No oitavo dia a gente volta a se falar em uma reunião rápida só para ouvir o feedback do time e, se fizer sentido, decidir juntos. Qual horário funciona melhor no oitavo dia pra já travar na agenda?</span>
+          <ul>
+            <li>Sempre feche com data, ação e responsável</li>
+            <li>Peça que ele passe os acessos para o time</li>
+            <li>Reforce: WhatsApp aberto durante os 7 dias</li>
+          </ul>
+        </div>
+      </div>
 
-    <script>
-        const slides = document.querySelectorAll('.slide');
-        const total = slides.length;
+    </div>
+  </div>
+</section>
 
-        for (let i = 0; i < total; i++) {
-            const dot = document.createElement('div');
-            dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
-            dot.setAttribute('data-slide', i);
-            dot.setAttribute('aria-label', 'Slide ' + (i + 1));
-            document.getElementById('navDots').appendChild(dot);
-        }
+<!-- Regras de ouro (checkpoints) -->
+<section class="followup">
+  <div class="container">
+    <span class="section-eyebrow">Regras de ouro</span>
+    <h2 class="section-title">Três coisas que <em>nunca se negocia.</em></h2>
+    <p class="section-lead">
+      O resto da call se adapta ao cliente. Estas três regras, não. Quebrou, perdeu a venda — ou pior, ganhou o cliente errado.
+    </p>
+    <div class="checkpoints">
+      <div class="checkpoint">
+        <div class="checkpoint-tag">Regra 01 · Ordem</div>
+        <div class="checkpoint-day">8<span>etapas</span></div>
+        <h3>Não pule etapas</h3>
+        <p>Se pular a confirmação do diagnóstico para ir direto ao sistema, você perde o fio. A ordem é o que torna a call persuasiva.</p>
+      </div>
+      <div class="checkpoint">
+        <div class="checkpoint-tag">Regra 02 · Ritmo</div>
+        <div class="checkpoint-day">5<span>min máx/tela</span></div>
+        <h3>Não canse o cliente</h3>
+        <p>Mostrar tudo vira commodity. Mostre o ouro, pause, pergunte se faz sentido, siga. Call que passa de 35 min perdeu força.</p>
+      </div>
+      <div class="checkpoint">
+        <div class="checkpoint-tag">Regra 03 · Postura</div>
+        <div class="checkpoint-day">0<span>promessa falsa</span></div>
+        <h3>Não prometa o que não entrega</h3>
+        <p>Não prometa lead, não prometa faturamento, não prometa "resolver tudo". O feez! entrega ferramenta — o resultado depende do uso.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-        const dots = document.querySelectorAll('.nav-dot');
-        const counter = document.getElementById('currentSlide');
+<!-- Biblioteca de objeções -->
+<section class="objections">
+  <div class="container">
+    <span class="section-eyebrow">Biblioteca de objeções</span>
+    <h2 class="section-title">O que o cliente diz <em>e como responder.</em></h2>
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const idx = Array.from(slides).indexOf(entry.target);
-                    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
-                    counter.textContent = idx + 1;
-                }
-            });
-        }, { threshold: 0.5 });
+    <div class="obj-grid">
+      <div class="obj-list">
+        <div class="obj-item">
+          <div class="q">Objeção 01 · Sistema</div>
+          <h4>"Já tenho sistema, não quero trocar agora."</h4>
+          <p>"Perfeito. A ideia aqui não é te fazer trocar nada hoje. Quero te mostrar onde o feez! entra justamente nos pontos que o seu sistema atual não cobre bem. Nos 7 dias de teste, é você quem vai me dizer se faz sentido manter os dois ou substituir."</p>
+        </div>
+        <div class="obj-item">
+          <div class="q">Objeção 02 · Equipe</div>
+          <h4>"Minha recepção não dá conta de mais um sistema."</h4>
+          <p>"É exatamente por isso que o feez! existe. Em vez de recepção ficar entre planilha, WhatsApp e sistema de agenda, ela passa a olhar tudo em um lugar só. Durante os 7 dias a gente foca em deixar o fluxo simples para o seu time."</p>
+        </div>
+        <div class="obj-item">
+          <div class="q">Objeção 03 · Tempo</div>
+          <h4>"Não quero mexer com campanha nem WhatsApp agora."</h4>
+          <p>"Compreensível. A boa notícia é que o papel da clínica é simples: pedir a campanha e acompanhar a agenda. Responder lead, lembrar paciente, cobrar boleto — o sistema faz. A proposta é tirar peso da equipe, não aumentar."</p>
+        </div>
+        <div class="obj-item">
+          <div class="q">Objeção 04 · Adoção</div>
+          <h4>"Não sei se a equipe vai usar."</h4>
+          <p>"Por isso existem os 7 dias de teste. Seu time de agenda, financeiro e gestão usa na prática. No oitavo dia, em vez de eu te convencer, é você quem traz o feedback do time. A decisão fica baseada em uso real, não em promessa minha."</p>
+        </div>
+        <div class="obj-item">
+          <div class="q">Objeção 05 · Decisão</div>
+          <h4>"Preciso falar com meu sócio."</h4>
+          <p>"Perfeito. Quer que eu mande um resumo pronto pra ele ler em 2 minutos? Ou prefere que eu entre numa call de 15 min com vocês dois ainda esta semana?" Sempre oferece caminho, nunca deixa em aberto.</p>
+        </div>
+        <div class="obj-item">
+          <div class="q">Objeção 06 · Migração</div>
+          <h4>"E meus dados atuais, como fica?"</h4>
+          <p>"A gente importa por você. Manda o arquivo ou print do que você usa hoje que o time de dados cuida em 24h. Você valida 3 pacientes ao acaso e pronto — base pronta para usar nos 7 dias de teste."</p>
+        </div>
+      </div>
 
-        slides.forEach(s => observer.observe(s));
+      <div class="promise-box">
+        <span class="tag">O que o closer nunca pode fazer</span>
+        <h3>Cinco erros que quebram o fechamento — e a reputação.</h3>
+        <p>
+          Cada um desses erros tira você do norte e enfraquece a venda. Se cometer, revise a gravação da call com o líder comercial.
+        </p>
+        <ul>
+          <li>Mostrar tudo (o sistema vira commodity)</li>
+          <li>Falar de preço antes da escolha guiada</li>
+          <li>Comparar com concorrente pelo nome</li>
+          <li>Prometer lead ou faturamento</li>
+          <li>Tentar convencer em vez de direcionar</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
 
-        dots.forEach(dot => {
-            dot.addEventListener('click', () => {
-                const i = parseInt(dot.dataset.slide, 10);
-                document.getElementById('slide-' + i).scrollIntoView({ behavior: 'smooth' });
-            });
-        });
+<section class="final">
+  <div class="container">
+    <h2>Confirme, organize,<br/><em>direcione.</em></h2>
+    <p>
+      Você não está aqui para ganhar uma call. Está para fechar com quem tem que fechar.
+      Quanto mais disciplina no script, mais natural o sim do cliente.
+    </p>
+    <a href="https://wa.me/5541998107937?text=Ol%C3%A1%2C%20tenho%20d%C3%BAvida%20sobre%20o%20script%20closer" class="final-btn">Falar com o líder comercial →</a>
+  </div>
+</section>
 
-        document.addEventListener('keydown', (e) => {
-            const current = parseInt(counter.textContent, 10) - 1;
-            if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
-                e.preventDefault();
-                if (current < total - 1) document.getElementById('slide-' + (current + 1)).scrollIntoView({ behavior: 'smooth' });
-            }
-            if (e.key === 'ArrowUp' || e.key === 'PageUp') {
-                e.preventDefault();
-                if (current > 0) document.getElementById('slide-' + (current - 1)).scrollIntoView({ behavior: 'smooth' });
-            }
-        });
-    </script>
+<footer>
+  <div class="container">
+    <div class="logo"><img src="images/feez-branco.png" alt="feez!" /></div>
+    <p>Script Closer · Uso interno · © 2026 feez!</p>
+  </div>
+</footer>
+
 </body>
 </html>
